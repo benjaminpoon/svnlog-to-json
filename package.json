@@ -1,0 +1,28 @@
+{
+  "name": "svnlog-to-json",
+  "version": "1.0.0",
+  "description": "An `svn log` to json module.",
+  "main": "index.js",
+  "bin": {
+    "svnlog2j": "index.js"
+  },
+  "dependencies": {
+    "dargs": "^4.0.0",
+    "sjljs": "^0.4.20",
+    "yargs": "^3.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "svn",
+    "log",
+    "json",
+    "tools",
+    "tool",
+    "util"
+  ],
+  "author": "Ely De La Cruz <elycruz@elycruz.com>",
+  "license": "ISC"
+}
