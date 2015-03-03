@@ -17,6 +17,10 @@ dashes instead of one at this time; E.g., `svnlog2j URL@rev --l=3`
 
 ### Usage
 
+**Using alias 1:**
+`svnlog2j [PATH] [params]`
+`svnlog2j URL[@REV] [PATH...] [params]`
+
 `svnlog2json [PATH] [params]`
 `svnlog2json URL[@REV] [PATH...] [params]`
 
@@ -33,13 +37,6 @@ dashes instead of one at this time; E.g., `svnlog2j URL@rev --l=3`
 
     **Aliases:**
     - `--save-as-xml`
-
-- **--to-json** - Tells the module to save the file in JSON format (is
-    set to `true` by default though if you want to output in the XML
-    format you just need to pass `--to-xml` the module checks this value first).
-
-    **Aliases:**
-    - `--save-as-json`
 
 ### License
 - ISC (http://opensource.org/licenses/ISC)

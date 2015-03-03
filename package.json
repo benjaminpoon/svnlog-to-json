@@ -1,6 +1,6 @@
 {
-  "name": "svnlog-to-json",
-  "version": "0.0.20",
+  "name": "svnlog2json",
+  "version": "0.0.21",
   "description": "An `svn log` to json or xml module.",
   "main": "index.js",
   "bin": {
