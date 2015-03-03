@@ -1,6 +1,6 @@
 {
   "name": "svnlog-to-json",
-  "version": "1.0.0",
+  "version": "0.0.10",
   "description": "An `svn log` to json module.",
   "main": "index.js",
   "bin": {
@@ -9,6 +9,7 @@
   "dependencies": {
     "dargs": "^4.0.0",
     "sjljs": "^0.4.20",
+    "xml2js": "^0.4.5",
     "yargs": "^3.4.5"
   },
   "devDependencies": {},
