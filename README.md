@@ -18,10 +18,13 @@ dashes instead of one at this time; E.g., `svnlog2j URL@rev --l=3`
 ### Usage
 
 **Using alias 1:**
+
 `svnlog2j [PATH] [params]`
+
 `svnlog2j URL[@REV] [PATH...] [params]`
 
 `svnlog2json [PATH] [params]`
+
 `svnlog2json URL[@REV] [PATH...] [params]`
 
 - **`[params]`** are any number of svn options for `svn log` along with
