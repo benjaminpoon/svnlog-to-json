@@ -17,11 +17,13 @@ dashes instead of one at this time; E.g., `svnlog2j URL@rev --l=3`
 
 ### Usage
 
-**Using alias 1:**
+**Using module alias 1:**
 
 `svnlog2j [PATH] [params]`
 
 `svnlog2j URL[@REV] [PATH...] [params]`
+
+**Using module alias 2:**
 
 `svnlog2json [PATH] [params]`
 
