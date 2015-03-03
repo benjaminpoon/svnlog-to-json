@@ -18,9 +18,7 @@ var fs = require('fs'),
         // Param aliases (needed so that their values are set on their full names on `yargs.argv`;
         // E.g., -l=1 translates to `yargs.argv.limit = 1`;
         .default('saveAsXml', false)
-        .default('saveAsJson', true)
         .alias('toXml', 'saveAsXml')
-        .alias('toJson', 'saveAsJson')
         .alias('toFilePath' , 'outputPath')
         .alias('op' , 'outputPath')
         .alias('c'  , 'change')
@@ -82,7 +80,7 @@ module.exports = (function () {
         },
 
         // Check whether we have to save the output file as json
-        saveAsJson = !argv.saveAsXml;
+        saveAsJson = sjl.empty(argv.saveAsXml);
 
     // Merge allowed command string args passed in
     Object.keys(argv).forEach(function (key) {
@@ -143,6 +141,8 @@ module.exports = (function () {
                         resolve(chalk.green(moduleName + ' completed successfully.'));
                     });
                 }
+
+                // If not --output-path then complete promise
                 else {
                     resolve(chalk.green(moduleName + ' completed successfully.'));
                 }

@@ -30,6 +30,7 @@ dashes instead of one at this time; E.g., `svnlog2j URL@rev --l=3`
 
 ### Module specific params:
 - **--output-path** - The path to output the output to.
+
     **Aliases:**
     - `--to-file-path`
 
