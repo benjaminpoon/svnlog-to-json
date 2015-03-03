@@ -15,7 +15,13 @@ var fs = require('fs'),
     dargs = require('dargs'),
     argv = require('yargs')
 
-        // Param aliases (needed so that they are translated to our full name params here (via `yargs`))
+        // Param aliases (needed so that their values are set on their full names on `yargs.argv`;
+        // E.g., -l=1 translates to `yargs.argv.limit = 1`;
+        .default('saveAsXml', false)
+        .default('saveAsJson', true)
+        .alias('toXml', 'saveAsXml')
+        .alias('toJson', 'saveAsJson')
+        .alias('toFilePath' , 'outputPath')
         .alias('op' , 'outputPath')
         .alias('c'  , 'change')
         .alias('x'  , 'extensions')
@@ -27,6 +33,8 @@ var fs = require('fs'),
         .argv,
 
     xml2js = require('xml2js'),
+    chalk = require('chalk'),
+    moduleName = 'svnlog2json',
     log = console.log;
 
 module.exports = (function () {
@@ -71,7 +79,10 @@ module.exports = (function () {
         cmdStringArgs = {
             xml: true,
             limit: 100
-        };
+        },
+
+        // Check whether we have to save the output file as json
+        saveAsJson = !argv.saveAsXml;
 
     // Merge allowed command string args passed in
     Object.keys(argv).forEach(function (key) {
@@ -88,43 +99,66 @@ module.exports = (function () {
     // Append args for svn
     cmdString += dargs(cmdStringArgs).join(' ');
 
-    // Execute command and get a handle to it
-    exec(cmdString, function (err, stdout, stderr) {
+    // Promise wrap for `exec`
+    (new Promise(function (resolve, reject) {
 
-        // If err
-        if (!sjl.empty(err)) {
-            log('An error occurred:\n', err, '\n');
-        }
+        // Execute command and get a handle to it
+        exec(cmdString, function (err, stdout, stderr) {
 
-        // If stderr
-        if (!sjl.empty(stderr)) {
-            log('A standard error occurred:\n', stderr, '\n');
-        }
+            // If err
+            if (!sjl.empty(err)) {
+                return reject(chalk.yellow('An error occurred:'), '\n', err, '\n');
+            }
 
-        // If output print/log it
-        if (!sjl.empty(stdout)) {
+            // If stderr
+            if (!sjl.empty(stderr)) {
+                return reject(chalk.yellow('A standard error occurred:'), '\n', stderr, '\n');
+            }
 
-            // Print standard output
-            log('standard output:\n', stdout, '\n');
+            // If output print/log it
+            if (!sjl.empty(stdout)) {
 
-            // If output to path
-            if (!sjl.empty(argv.outputPath) && sjl.classOfIs(argv.outputPath, 'String')) {
-                xml2js.parseString(stdout, function (xml2jsError, result) {
-                    if (!sjl.empty(xml2jsError)) {
-                        log('xml2js `parseString` error:\n', xml2jsError);
-                        return;
-                    }
-                    var pathToWriteTo = path.resolve(process.cwd(), argv.outputPath);
-                    log('Output written to "' + pathToWriteTo + '".\n');
-                    fs.writeFileSync(pathToWriteTo, JSON.stringify(result));
+                // Print standard output
+                log(chalk.cyan('standard output:'), '\n', stdout, '\n');
 
-                    log('svnlog2j completed successfully.');
-                });
+                // If output to path
+                if (!sjl.empty(argv.outputPath) && sjl.classOfIs(argv.outputPath, 'String')) {
 
-            } // /if output-path
+                    // Parse xml string
+                    xml2js.parseString(stdout, function (xml2jsError, result) {
 
-        } // /if stdout
+                        // If xml2js parse string error
+                        if (!sjl.empty(xml2jsError)) {
+                            return reject(chalk.yellow('xml2js `parseString` error:'), '\n', xml2jsError);
+                        }
 
-    }); // /exec
+                        // Path to write to
+                        var pathToWriteTo = path.resolve(process.cwd(), argv.outputPath);
+
+                        // Write output file
+                        fs.writeFileSync(pathToWriteTo, saveAsJson ? JSON.stringify(result) : (new xml2js.Builder().buildObject(result)));
+
+                        // Message user
+                        log(chalk.cyan('Output written to "' + pathToWriteTo + '" .'), '\n');
+                        resolve(chalk.green(moduleName + ' completed successfully.'));
+                    });
+                }
+                else {
+                    resolve(chalk.green(moduleName + ' completed successfully.'));
+                }
+
+            } // /if stdout
+
+        }); // /exec
+
+    }).then(function (message) {
+
+            log(message);
+
+        }, function (message) {
+
+            log(message);
+
+        })); // /Promise
 
 }()); // /module.exports
