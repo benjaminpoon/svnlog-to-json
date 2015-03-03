@@ -38,6 +38,7 @@ dashes instead of one at this time; E.g., `svnlog2j URL@rev --l=3`
 
     **Aliases:**
     - `--save-as-xml`
+    
 ### Resources:
 - **`svn log`** docs (http://svnbook.red-bean.com/en/1.7/svn.ref.svn.c.log.html)
 
